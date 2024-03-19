@@ -1,0 +1,11 @@
+---
+- name: epel
+  hosts: all
+  gather_facts: no
+  tasks:
+  - name: epel 패키지 설치
+    yum: 
+      name: 
+        - epel-release
+      state: latest
+      

@@ -1,0 +1,21 @@
+---
+- name: 복원 작업
+  hosts: all
+  tasks:
+  - name: stopped {{ db_service }} service
+    service:
+      name: mariadb
+      state: stopped
+      enabled: no
+
+  - name: unInstall {{ pkg_db }} package
+    yum:
+      name: "{{ pkg_db }}"
+      state: absent
+    vars:
+      pkg_db:
+      - mariadb-server
+      - python3-PyMySQL
+    when : ansible_distribution == 'CentOS'
+
+

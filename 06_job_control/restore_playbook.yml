@@ -1,0 +1,23 @@
+---
+- name: Task Failure Exercise 복원 작업
+  hosts: all
+  vars:
+    web_package: httpd
+    db_package: mariadb-server
+    db_service: mariadb
+  tasks:
+  - name: stopped {{ db_service }} service
+    service:
+      name: "{{ db_service }}"
+      state: stopped
+      enabled: no
+
+  - name: unInstall {{ web_package }} package
+    yum:
+      name: "{{ web_package }}"
+      state: absent
+
+  - name: unInstall {{ db_package }} package
+    yum:
+      name: "{{ db_package }}"
+      state: absent

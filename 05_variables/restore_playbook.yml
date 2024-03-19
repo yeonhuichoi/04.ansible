@@ -1,0 +1,33 @@
+---
+- name: 웹 서비스 되돌리기
+  hosts: all
+  vars_files:
+  - vars/web.yml
+  tasks:
+  - name: 방화벽 서비스 포트 삭제 - http, https
+    firewalld: 
+      service: "{{ item }}"
+      permanent: yes
+      immediate: yes
+      state: disabled
+    loop:
+      - "{{ fw_http }}"
+      - "{{ fw_https }}"
+
+  - name: 웹 서비스 내리기 ({{ svc_web }})
+    service: 
+      name: "{{ svc_web }}"
+      enalbed: no
+      state: stopped
+
+  - name: 웹 서비스 파일 삭제  ({{ file_web }})
+    file:
+      path: "{{ file_web }}"
+      state: absent
+
+  - name: 웹 패키지 삭제 ({{ pkg_web_http }}, {{ pkg_web_https }})
+    yum: 
+      name: 
+        - "{{ pkg_web_http }}"
+        - "{{ pkg_web_https }}"
+      state: absent
